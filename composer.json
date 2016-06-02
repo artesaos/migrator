@@ -1,0 +1,19 @@
+{
+    "name": "artesaos/migrator",
+    "description": "Namespaced Migrations for Laravel 5.1+",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Diego Hernandes",
+            "email": "diego@hernandev.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Migrator\\": "src/"
+        }
+    }
+}
