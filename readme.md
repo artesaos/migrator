@@ -13,7 +13,9 @@ This Package Supports Laravel 5.1 and 5.2, other versions may need some adjusts 
 
 In order to install Migrator, run the following command into your Laravel 5.2+ project:
 
-> composer require artesaos/migrator
+```
+composer require artesaos/migrator
+```
 
 After installing the Package, you can now register it's provider into your config/app.php file:
 
@@ -29,7 +31,7 @@ After installing the Package, you can now register it's provider into your confi
 As the default Laravel migrator, this one has all the original commands, to list the available options, you can see all the available options using `php artisan` command.
 
 ```
-migrator              Run the database migrations
+migrator            Run the database migrations
 migrator:install    Create the migration repository
 migrator:make       Create a new migration file
 migrator:refresh    Reset and re-run all migrations
