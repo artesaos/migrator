@@ -10,6 +10,7 @@ use Migrator\Console\RefreshCommand;
 use Migrator\Console\ResetCommand;
 use Migrator\Console\RollbackCommand;
 use Migrator\Console\StatusCommand;
+use Migrator\Seeder\Manager;
 
 class MigrationServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,8 @@ class MigrationServiceProvider extends ServiceProvider
         // all of the migration related commands that are used by the "Artisan" CLI
         // so that they may be easily accessed for registering with the consoles.
         $this->registerMigrator();
+
+        $this->registerSeeder();
 
         $this->registerCreator();
 
@@ -214,5 +217,12 @@ class MigrationServiceProvider extends ServiceProvider
             'command.migrator.status', 'migrator.creator',
             'command.migrator.make',
         ];
+    }
+
+    protected function registerSeeder()
+    {
+        $this->app->singleton('migrator.seeder.manager', function() {
+            return new Manager();
+        });
     }
 }
