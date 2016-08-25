@@ -15,4 +15,15 @@ trait MigratorTrait
         }
 
     }
+
+    public function seeders($seeders)
+    {
+        if (is_array($seeders)) {
+            foreach($seeders as $seeder) {
+                $this->app['migrator.seeder.manager']->addSeeder($seeder);
+            }
+        } else {
+            $this->app['migrator.seeder.manager']->addSeeder($seeders);
+        }
+    }
 }

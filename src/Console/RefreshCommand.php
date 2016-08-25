@@ -73,7 +73,7 @@ class RefreshCommand extends BaseCommand
      */
     protected function runSeeder($database)
     {
-        $class = $this->option('seeder') ?: 'DatabaseSeeder';
+        $class = $this->option('seeder') ?: 'Migrator\Seeder\DatabaseSeeder';
 
         $force = $this->input->getOption('force');
 
