@@ -203,10 +203,31 @@ class Migrator
         if ($count === 0) {
             $this->note('<info>Nothing to rollback.</info>');
         } else {
+
+            // create an empty collection that will hold
+            // the inverse order migrations
+            $rollbackMigrations = collect([]);
+
+            // loop through available migrations
+            foreach($this->migrations as $registeredMigration) {
+                // loop to search, on the ran migrations
+                foreach($migrations as $ranMigration) {
+                    // if the available migration is already ran
+                    // push into the list
+                    if ($ranMigration->migration == $registeredMigration) {
+                        $rollbackMigrations->push($ranMigration);
+                    }
+                }
+            }
+
+            // now that we discovered the correct order to
+            // inverse the migrations, reverse the order to rollback
+            $rollbackMigrations = $rollbackMigrations->reverse();
+
             // We need to reverse these migrations so that they are "downed" in reverse
             // to what they run on "up". It lets us backtrack through the migrations
             // and properly reverse the entire database schema operation that ran.
-            foreach ($migrations as $migration) {
+            foreach ($rollbackMigrations as $migration) {
                 $this->runDown((object) $migration, $pretend);
             }
         }
@@ -224,14 +245,35 @@ class Migrator
     {
         $this->notes = [];
 
-        $migrations = array_reverse($this->repository->getRan());
+        $migrations = $this->repository->getRan();
 
         $count = count($migrations);
 
         if ($count === 0) {
             $this->note('<info>Nothing to rollback.</info>');
         } else {
-            foreach ($migrations as $migration) {
+
+            // create an empty collection that will hold
+            // the inverse order migrations
+            $resetMigrations = collect([]);
+
+            // loop through available migrations
+            foreach($this->migrations as $registeredMigration) {
+                // loop to search, on the ran migrations
+                foreach($migrations as $ranMigration) {
+                    // if the available migration is already ran
+                    // push into the list
+                    if ($ranMigration == $registeredMigration) {
+                        $resetMigrations->push($ranMigration);
+                    }
+                }
+            }
+
+            // now that we discovered the correct order to
+            // inverse the migrations, reverse the order to reset (rollback)
+            $resetMigrations = $resetMigrations->reverse();
+
+            foreach ($resetMigrations as $migration) {
                 $this->runDown((object) ['migration' => $migration], $pretend);
             }
         }
