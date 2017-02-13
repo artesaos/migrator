@@ -38,6 +38,7 @@ migrator:refresh    Reset and re-run all migrations
 migrator:reset      Rollback all database migrations
 migrator:rollback   Rollback the last database migration
 migrator:status     Show the status of each migration
+migrator --seed     Run database seeding
 ```
 
 #### Creating Migrations
