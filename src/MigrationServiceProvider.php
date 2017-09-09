@@ -221,7 +221,7 @@ class MigrationServiceProvider extends ServiceProvider
 
     protected function registerSeeder()
     {
-        $this->app->singleton('migrator.seeder.manager', function() {
+        $this->app->singleton('migrator.seeder.manager', function () {
             return new Manager();
         });
     }

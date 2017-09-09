@@ -80,7 +80,7 @@ class Migrator
 
     /**
      * Forget a registered Migration
-     * 
+     *
      * @param $class
      * @param null $alias
      */
@@ -209,9 +209,9 @@ class Migrator
             $rollbackMigrations = collect([]);
 
             // loop through available migrations
-            foreach($this->migrations as $registeredMigration) {
+            foreach ($this->migrations as $registeredMigration) {
                 // loop to search, on the ran migrations
-                foreach($migrations as $ranMigration) {
+                foreach ($migrations as $ranMigration) {
                     // if the available migration is already ran
                     // push into the list
                     if ($ranMigration->migration == $registeredMigration) {
@@ -258,9 +258,9 @@ class Migrator
             $resetMigrations = collect([]);
 
             // loop through available migrations
-            foreach($this->migrations as $registeredMigration) {
+            foreach ($this->migrations as $registeredMigration) {
                 // loop to search, on the ran migrations
-                foreach($migrations as $ranMigration) {
+                foreach ($migrations as $ranMigration) {
                     // if the available migration is already ran
                     // push into the list
                     if ($ranMigration == $registeredMigration) {
