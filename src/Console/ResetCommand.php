@@ -44,6 +44,11 @@ class ResetCommand extends Command
         $this->migrator = $migrator;
     }
 
+    public function handle()
+    {
+        return $this->fire();
+    }
+
     /**
      * Execute the console command.
      *
