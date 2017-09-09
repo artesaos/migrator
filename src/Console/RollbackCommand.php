@@ -69,6 +69,11 @@ class RollbackCommand extends Command
         }
     }
 
+    public function handle()
+    {
+        return $this->fire();
+    }
+
     /**
      * Get the console command options.
      *
