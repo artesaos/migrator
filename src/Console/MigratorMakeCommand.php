@@ -88,7 +88,6 @@ class MigratorMakeCommand extends BaseCommand
      */
     protected function writeMigration($name, $table, $create)
     {
-
         $file = pathinfo($this->creator->create($name, $table, $create), PATHINFO_FILENAME);
 
         $this->line("<info>Created Migration:</info> $file");
