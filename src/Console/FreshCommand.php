@@ -52,30 +52,33 @@ class FreshCommand extends BaseCommand
         }
     }
 
-    /**
-     * Determine if the developer has requested database seeding.
-     *
-     * @return bool
-     */
-    protected function needsSeeding()
-    {
-        return $this->option('seed') || $this->option('seeder');
-    }
-    /**
-     * Run the database seeder command.
-     *
-     * @param  string  $database
-     * @return void
-     */
+      /**
+       * Determine if the developer has requested database seeding.
+       *
+       * @return bool
+       */
+      protected function needsSeeding()
+      {
+          return $this->option('seed') || $this->option('seeder');
+      }
 
-    protected function runSeeder($database)
-    {
-        $this->call('db:seed', [
-            '--database' => $database,
-            '--class' => $this->option('seeder') ?: 'DatabaseSeeder',
-            '--force' => $this->option('force'),
-        ]);
-    }
+      /**
+       * Run the database seeder command.
+       *
+       * @param  string  $database
+       * @return void
+       */
+      protected function runSeeder($database)
+      {
+          $class = $this->option('seeder') ?: 'Migrator\Seeder\DatabaseSeeder';
+
+          $force = $this->input->getOption('force');
+
+          $this->call('db:seed', [
+              '--database' => $database, '--class' => $class, '--force' => $force,
+          ]);
+      }
+
     /**
      * Get the console command options.
      *
