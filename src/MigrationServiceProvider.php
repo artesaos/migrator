@@ -3,6 +3,7 @@
 namespace Migrator;
 
 use Illuminate\Support\ServiceProvider;
+use Migrator\Console\FreshCommand;
 use Migrator\Console\InstallCommand;
 use Migrator\Console\MigrateCommand;
 use Migrator\Console\MigratorMakeCommand;
@@ -92,7 +93,7 @@ class MigrationServiceProvider extends ServiceProvider
      */
     protected function registerCommands()
     {
-        $commands = ['Migrate', 'Rollback', 'Reset', 'Refresh', 'Install', 'Make', 'Status'];
+        $commands = ['Migrate', 'Fresh', 'Rollback', 'Reset', 'Refresh', 'Install', 'Make', 'Status'];
 
         // We'll simply spin through the list of commands that are migration related
         // and register each one of them with an application container. They will
@@ -106,10 +107,23 @@ class MigrationServiceProvider extends ServiceProvider
         // when the Artisan application actually starts up and is getting used.
         $this->commands(
             'command.migrator', 'command.migrator.make',
-            'command.migrator.install', 'command.migrator.rollback',
-            'command.migrator.reset', 'command.migrator.refresh',
-            'command.migrator.status'
+            'command.migrator.fresh', 'command.migrator.install',
+            'command.migrator.rollback', 'command.migrator.reset',
+            'command.migrator.refresh', 'command.migrator.status'
         );
+    }
+
+
+    /**
+     * Register the "refresh" migration command.
+     *
+     * @return void
+     */
+    protected function registerFreshCommand()
+    {
+        $this->app->singleton('command.migrator.fresh', function () {
+            return new FreshCommand();
+        });
     }
 
     /**
