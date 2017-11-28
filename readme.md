@@ -32,6 +32,7 @@ As the default Laravel migrator, this one has all the original commands, to list
 
 ```
 migrator            Run the database migrations
+migrator:fresh      Drop all tables and re-run all migrations
 migrator:install    Create the migration repository
 migrator:make       Create a new migration file
 migrator:refresh    Reset and re-run all migrations
