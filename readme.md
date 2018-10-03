@@ -7,7 +7,7 @@ This package is a customized version of Laravel's default database migrator, it 
 There is no timestamp previews since the run order is based on how you register the migrations.
 
 ### Warning
-This Package Supports Laravel 5.1 and 5.2, other versions may need some adjusts in order to work and are not recommended.
+This Package Supports Laravel starting on 5.2 up to the latest stable version.
 
 ### Installing
 
@@ -26,6 +26,26 @@ After installing the Package, you can now register it's provider into your confi
 ]
 ```
 
+And publish configuration: with
+
+```
+php artisan vendor:publish --provider="Migrator\MigrationServiceProvider"
+```
+
+### Upgrading from v1.x to v2.0.
+
+On v1.x, this package uses the same table name as the default migration engine.
+
+On version v2, there is a separate table used for tracking migrations, and it defaults to: `migrator_table`
+
+If you are upgrading from v1, you may either rename the `migrations` table to `migrator_table` **OR**
+publish the config file and set the migrator table name to `migrations`.
+
+Either should work.
+
+v2 works alongside default migrations, for projects who want to namespace migrations
+but already have many migrations in place.
+
 ### Usage
 
 As the default Laravel migrator, this one has all the original commands, to list the available options, you can see all the available options using `php artisan` command.
@@ -40,6 +60,9 @@ migrator:reset      Rollback all database migrations
 migrator:rollback   Rollback the last database migration
 migrator:status     Show the status of each migration
 ```
+
+
+
 
 #### Creating Migrations
 
