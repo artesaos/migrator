@@ -22,6 +22,21 @@ class MigrationServiceProvider extends ServiceProvider
     protected $defer = false;
 
     /**
+     * Boot the service provider.
+     */
+    public function boot()
+    {
+        // config file path.
+        $configFilePath = __DIR__ . '/../resources/config/migrator.php';
+        // mark the publishable file.
+        $this->publishes([
+            $configFilePath => config_path('migrator.php'),
+        ]);
+        // merge default with custom config.
+        $this->mergeConfigFrom($configFilePath, 'seotools');
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
@@ -50,7 +65,8 @@ class MigrationServiceProvider extends ServiceProvider
     protected function registerRepository()
     {
         $this->app->singleton('migrator.repository', function ($app) {
-            $table = $app['config']['database.migrations'];
+            // try own configuration first, use default one otherwise.
+            $table = $app['config']['migrator.table'] ?? $app['config']['database.migrations'];
 
             return new DatabaseMigrationRepository($app['db'], $table);
         });
@@ -98,7 +114,7 @@ class MigrationServiceProvider extends ServiceProvider
         // and register each one of them with an application container. They will
         // be resolved in the Artisan start file and registered on the console.
         foreach ($commands as $command) {
-            $this->{'register'.$command.'Command'}();
+            $this->{'register' . $command . 'Command'}();
         }
 
         // Once the commands are registered in the application IoC container we will
@@ -211,10 +227,15 @@ class MigrationServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
-            'migrator.instance', 'migrator.repository', 'command.migrator',
-            'command.migrator.rollback', 'command.migrator.reset',
-            'command.migrator.refresh', 'command.migrator.install',
-            'command.migrator.status', 'migrator.creator',
+            'migrator.instance',
+            'migrator.repository',
+            'command.migrator',
+            'command.migrator.rollback',
+            'command.migrator.reset',
+            'command.migrator.refresh',
+            'command.migrator.install',
+            'command.migrator.status',
+            'migrator.creator',
             'command.migrator.make',
         ];
     }
