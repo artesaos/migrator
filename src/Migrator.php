@@ -5,6 +5,8 @@ namespace Migrator;
 use Illuminate\Support\Arr;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Migrator
 {
@@ -103,7 +105,11 @@ class Migrator
     {
         $this->notes = [];
 
-        $allMigrations = $this->getMigrations();
+        if ($paths[0] === "") {
+            $allMigrations = $this->getMigrations();
+        } else {
+            $allMigrations = $this->getMigrationFiles($paths);
+        }
 
         // Once we grab all of the migration files for the path, we will compare them
         // against the migrations that have already been run for this package then
@@ -284,8 +290,8 @@ class Migrator
     /**
      * Run "down" a migration instance.
      *
-     * @param  object  $migration
-     * @param  bool    $pretend
+     * @param  object $migration
+     * @param  bool   $pretend
      * @return void
      */
     protected function runDown($migration, $pretend)
@@ -324,8 +330,8 @@ class Migrator
     /**
      * Pretend to run the migrations.
      *
-     * @param  object  $migration
-     * @param  string  $method
+     * @param  object $migration
+     * @param  string $method
      * @return void
      */
     protected function pretendToRun($migration, $method)
@@ -340,8 +346,8 @@ class Migrator
     /**
      * Get all of the queries that would be run for a migration.
      *
-     * @param  object  $migration
-     * @param  string  $method
+     * @param  object $migration
+     * @param  string $method
      * @return array
      */
     protected function getQueries($migration, $method)
@@ -361,12 +367,61 @@ class Migrator
     /**
      * Create a instance of a registered migration
      *
-     * @param  string  $class
+     * @param  string $class
      * @return object
      */
     public function resolve($class)
     {
         return new $class;
+    }
+
+    /**
+     * Get all of the migration files in a given path.
+     *
+     * @param  string|array $paths
+     * @return array|string
+     */
+    public function getMigrationFiles($paths)
+    {
+        $allMigrations = Collection::make($paths)->flatMap(function ($path) {
+            return Str::endsWith($path, '.php') ? [$path] : $this->files->glob($path.'/*.php');
+        })->filter()->values()->keyBy(function ($file) {
+            return $this->getMigrationName($file);
+        })->sortBy(function ($file, $key) {
+            return $key;
+        })->all();
+
+        return $this->getNameSpace($allMigrations);
+    }
+
+    /**
+     * Get the namespace of the migration.
+     *
+     * @param  array|string $path
+     * @return array|string
+     */
+    public function getNameSpace($paths)
+    {
+        $allNamespaces = [];
+        foreach ($paths as $filename => $basepath) {
+            $basepath = str_replace('app', 'Bitis\Core', $basepath);
+            $basepath = str_replace('/', '\\', $basepath);
+            $basepath = str_replace('.php', '', $basepath);
+            array_push($allNamespaces, $basepath);
+        }
+
+        return $allNamespaces;
+    }
+
+    /**
+     * Get the name of the migration.
+     *
+     * @param  string $path
+     * @return string
+     */
+    public function getMigrationName($path)
+    {
+        return str_replace('.php', '', basename($path));
     }
 
     /**

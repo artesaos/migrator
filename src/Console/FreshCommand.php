@@ -46,6 +46,7 @@ class FreshCommand extends Command
         $options = [
             '--database' => $database,
             '--force' => true,
+            '--path' => $this->input->getOption('path'),
         ];
         if ($this->needsSeeding()) {
             $options['--seed'] = true;
@@ -102,6 +103,7 @@ class FreshCommand extends Command
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
             ['seed', null, InputOption::VALUE_NONE, 'Indicates if the seed task should be re-run.'],
             ['seeder', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder.'],
+            ['path', null, InputOption::VALUE_OPTIONAL, 'The path to the migrations files to be executed'],
         ];
     }
 }
