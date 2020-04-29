@@ -1,4 +1,5 @@
-# artesaos/migrator
+
+# marcelohoffmeister/migrator
 
 [![Latest Stable Version](https://poser.pugx.org/artesaos/migrator/v/stable)](https://packagist.org/packages/artesaos/migrator) [![Total Downloads](https://poser.pugx.org/artesaos/migrator/downloads)](https://packagist.org/packages/artesaos/migrator) [![Monthly Downloads](https://poser.pugx.org/artesaos/migrator/d/monthly)](https://packagist.org/packages/artesaos/migrator) [![License](https://poser.pugx.org/artesaos/migrator/license)](https://packagist.org/packages/artesaos/migrator)
 
@@ -10,11 +11,10 @@ There is no timestamp previews since the run order is based on how you register 
 This Package Supports Laravel starting on 5.2 up to the latest stable version.
 
 ### Installing
-
-In order to install Migrator, run the following command into your Laravel 5.2+ project:
+In order to install Migrator, run the following command into your Laravel 6.0+ project:
 
 ```
-composer require artesaos/migrator
+composer require marcelohoffmeister/migrator
 ```
 
 After installing the Package, you can now register it's provider into your config/app.php file:
@@ -22,7 +22,7 @@ After installing the Package, you can now register it's provider into your confi
 ```php
 'providers' => [
     // other providers omitted.
-    Migrator\MigrationServiceProvider::class,
+  Migrator\MigrationServiceProvider::class,
 ]
 ```
 
@@ -31,20 +31,6 @@ And publish configuration: with
 ```
 php artisan vendor:publish --provider="Migrator\MigrationServiceProvider"
 ```
-
-### Upgrading from v1.x to v2.0.
-
-On v1.x, this package uses the same table name as the default migration engine.
-
-On version v2, there is a separate table used for tracking migrations, and it defaults to: `migrator_table`
-
-If you are upgrading from v1, you may either rename the `migrations` table to `migrator_table` **OR**
-publish the config file and set the migrator table name to `migrations`.
-
-Either should work.
-
-v2 works alongside default migrations, for projects who want to namespace migrations
-but already have many migrations in place.
 
 ### Usage
 
@@ -61,11 +47,7 @@ migrator:rollback   Rollback the last database migration
 migrator:status     Show the status of each migration
 ```
 
-
-
-
 #### Creating Migrations
-
 In order to generate an empty migration, please provide the migrator with the full qualified class name, as the example.
 
 `php artisan migrator:make 'MyApp\MyModule\Database\Migrations\CreateOrdersTable' --create=orders`
@@ -83,24 +65,18 @@ use Illuminate\Database\Migrations\Migration;
 class CreateOrdersTable extends Migration
 {
     /**
-     * @var \Illuminate\Database\Schema\Builder
-     */
-    protected $schema;
+ * @var \Illuminate\Database\Schema\Builder
+ */  protected $schema;
 
     /**
-     * Migration constructor.
-     */
-     public function __construct()
+ * Migration constructor. */  public function __construct()
      {
          $this->schema = app('db')->connection()->getSchemaBuilder();
      }
 
     /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+ * Run the migrations. * * @return void
+ */  public function up()
     {
         $this->schema->create('orders', function (Blueprint $table) {
             $table->increments('id');
@@ -109,11 +85,8 @@ class CreateOrdersTable extends Migration
     }
 
     /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+ * Reverse the migrations. * * @return void
+ */  public function down()
     {
         $this->schema->drop('orders');
     }
@@ -124,15 +97,16 @@ To declare your table fields, just follow the usual schema build practices, this
 
 As the normal migrator, you can pass the option `--table` instead of `--create` in order to generate a update migration instead of a create one. Also, you can create a empty migration not passing any of those options.
 
-#### Registering migrations.
+**In this fork, you can pass the option --path for the fresh command. This execute the command in the specific path.**
 
+#### Registering migrations.
 Inside any service provider of your choice (usually on the same namespace that you're storing the migrations), you easily register the migrations using the *`Migrator\MigratorTrait`*:
 
 ```php
 <?php
 
 namespace MyApp\MyModule\Providers;
-
+  
 use Illuminate\Support\ServiceProvider;
 use Migrator\MigratorTrait;
 use MyApp\MyModule\Database\Migrations\CreateOrdersTable;
@@ -141,7 +115,7 @@ use MyApp\MyModule\Database\Migrations\CreateProductsTable;
 class MyModuleServiceProvider extends ServiceProvider
 {
     use MigratorTrait;
-    
+
     public function register()
     {
         $this->migrations([
@@ -151,5 +125,3 @@ class MyModuleServiceProvider extends ServiceProvider
     }
 }
 ```
-
-

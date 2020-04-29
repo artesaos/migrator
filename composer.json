@@ -1,12 +1,12 @@
 {
-    "name": "artesaos/migrator",
-    "description": "Namespaced Migrations for Laravel 5.1+",
+    "name": "marcelohoffmeister/migrator",
+    "description": "Namespaced Migrations for Laravel 6.0+",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Diego Hernandes",
-            "email": "diego@hernandev.com"
+            "name": "Marcelo Hoffmeister",
+            "email": "marcelohenriquehoffmeister@gmail.com"
         }
     ],
     "minimum-stability": "stable",

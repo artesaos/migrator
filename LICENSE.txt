@@ -1,4 +1,4 @@
-Migrator is based on the original laravel/framework migrator system.
+Migrator is based on the original artesaos/migrator migrator lib.
 Here is a copy of the original license.
 ----------------------------------------------------------------------------
 The MIT License (MIT)
